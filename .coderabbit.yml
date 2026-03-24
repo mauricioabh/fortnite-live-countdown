@@ -1,0 +1,5 @@
+language: es
+reviews:
+  auto_review: true
+  drafts: false
+  tone_instructions: concise

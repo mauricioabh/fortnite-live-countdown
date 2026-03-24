@@ -1,0 +1,78 @@
+---
+alwaysApply: true
+---
+
+## Convenciones de código
+
+### TypeScript
+
+- Siempre TypeScript estricto, nunca usar `any`
+- Definir todos los tipos e interfaces en src/types/
+- Usar tipos de Drizzle inferidos con `typeof schema.$inferSelect`
+- Exportar tipos desde un index.ts en src/types/
+
+### Componentes
+
+- PascalCase para componentes: UserCard.tsx
+- kebab-case para carpetas: user-card/
+- Siempre componentes funcionales con arrow functions
+- Server Components por defecto
+- Agregar "use client" solo si es estrictamente necesario
+- Props siempre tipadas con interface, nunca type inline
+
+### Estructura de un componente
+
+- Imports externos primero, internos después
+- Props interface antes del componente
+- Lógica antes del return
+- Un solo return por componente
+
+### Archivos
+
+- Un componente por archivo
+- index.ts para re-exportar desde carpetas
+- Barrel exports en components/ui/ y components/layout/
+
+### Manejo de errores
+
+- Nunca silenciar errores con try/catch vacío
+- Siempre manejar loading, error y empty states
+- Usar Error Boundaries en layouts principales
+
+### Server Actions y API Routes
+
+- Siempre validar input con Zod antes de tocar la DB
+- Siempre verificar autenticación con Clerk antes de operar
+- Retornar tipos consistentes: { data, error }
+
+### Estilos
+
+- Solo Tailwind, nunca CSS inline ni archivos .css
+- Usar cn() de shadcn para clases condicionales
+- Variantes de componentes con cva()
+- **Design tokens (obligatorio, web y mobile):** Usar el paquete de tokens del monorepo (ruta habitual `packages/ui`, fuente del import: campo `name` en `packages/ui/package.json`) en toda la UI (apps/web y apps/mobile):
+  - **Spacing:** preferir clases con nombres de token: `p-lg`, `px-xl`, `py-2xl`, `gap-md`, `mt-xl`, `mb-3xl`, etc. (xs, sm, md, lg, xl, 2xl, 3xl). Evitar valores sueltos como `p-6`, `mt-10`, `gap-4` salvo que no exista token equivalente.
+  - **Tipografía:** usar escalas del token: `text-xs`, `text-sm`, `text-base`, `text-lg`, `text-xl`, `text-2xl`, `text-3xl`. No usar `text-4xl`, `text-5xl`, `text-6xl` ni tamaños rem arbitrarios sin alinear al token.
+  - **Colores:** solo variables semánticas (bg-primary, text-muted-foreground, border-border, etc.); en web vía CSS variables, en mobile asegurar que tailwind.config extienda theme.colors con los mismos tokens si se usan.
+
+## Comportamiento del agente
+
+- Nunca hardcodear API keys, passwords o secrets en el código
+- Nunca leer ni modificar .env.local directamente
+- Nunca correr migraciones destructivas sin aprobación explícita del usuario
+- Siempre pedir aprobación antes de:
+  - Eliminar archivos o carpetas
+  - Modificar el schema de DB (schema.ts)
+  - Cambiar configuración de autenticación (middleware.ts o proxy.ts)
+  - Cualquier cambio que afecte más de 10 archivos
+- Si un cambio es complejo o afecta múltiples módulos, presentar
+  un plan detallado y esperar aprobación antes de implementar
+
+## MCPs disponibles
+
+El agente tiene acceso a los siguientes MCPs y debe usarlos cuando sea relevante:
+
+- filesystem → leer/escribir archivos del proyecto
+- github → crear ramas, commits, PRs
+- neon → gestionar base de datos, tablas, migraciones
+- vercel → deployments, variables de entorno, logs

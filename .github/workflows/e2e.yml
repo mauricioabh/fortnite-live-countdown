@@ -1,0 +1,22 @@
+name: E2E
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: "1"
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_placeholder_must_replace_in_production_00
+      CLERK_SECRET_KEY: sk_test_placeholder_must_replace_in_production_00000000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e -w web
