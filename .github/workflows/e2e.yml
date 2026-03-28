@@ -1,3 +1,7 @@
+# Playwright arranca Next en dev; Clerk valida NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY en runtime.
+# Añade en el repo (Settings → Secrets and variables → Actions):
+#   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY  — instancia Development de Clerk (pk_test_…)
+#   CLERK_SECRET_KEY                   — misma instancia (sk_test_…)
 name: E2E
 
 on:
@@ -9,10 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SKIP_ENV_VALIDATION: "1"
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_placeholder_must_replace_in_production_00
-      CLERK_SECRET_KEY: sk_test_placeholder_must_replace_in_production_00000000
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v4
+      - name: Require Clerk secrets for E2E
+        env:
+          PK: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          SK: ${{ secrets.CLERK_SECRET_KEY }}
+        run: |
+          if [ -z "$PK" ] || [ -z "$SK" ]; then
+            echo "::error::E2E needs repository secrets NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY (Clerk Dashboard → API Keys, Development)."
+            exit 1
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
