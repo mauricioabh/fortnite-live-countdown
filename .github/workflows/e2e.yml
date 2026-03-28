@@ -31,5 +31,7 @@ jobs:
           node-version: "20"
           cache: npm
       - run: npm ci
+      # next dev resolves @fortnite-live-countdown/* via package exports → dist/; must exist before webServer starts
+      - run: npx turbo run build --filter="./packages/*"
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e -w web
