@@ -17,5 +17,11 @@ export default defineConfig({
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
     cwd: __dirname,
+    // Explicit env so the Next dev server (child process) receives CI secrets;
+    // default inheritance can be unreliable with npm workspaces / monorepo.
+    env: {
+      ...process.env,
+      SKIP_ENV_VALIDATION: process.env.SKIP_ENV_VALIDATION ?? "1",
+    },
   },
 });
