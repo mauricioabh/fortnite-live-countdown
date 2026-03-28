@@ -1,0 +1,28 @@
+---
+description: Usar siempre comandos compatibles con PowerShell en Windows
+alwaysApply: true
+---
+
+# Comandos compatibles con PowerShell
+
+El entorno es **Windows con PowerShell**. Todas las órdenes de terminal deben ser válidas en PowerShell.
+
+## Reglas
+
+- **Encadenar comandos**: usar `;` en lugar de `&&`.
+  - ❌ `cd C:\Projects\foo && npm install`
+  - ✅ `Set-Location C:\Projects\foo; npm install`
+- **Cambiar directorio y ejecutar**: preferir `Set-Location ...; comando` o ejecutar en dos pasos si hace falta.
+- **Variables de entorno**: usar sintaxis PowerShell `$env:NOMBRE = "valor"` si se necesitan.
+- **Rutas**: pueden usar `\` o `/`; para rutas con espacios, usar comillas dobles.
+- **No asumir Bash**: evitar `&&`, `||`, `$(...)` para subcomandos, y construcciones específicas de Bash.
+
+## Ejemplos
+
+```powershell
+# Instalar y ejecutar
+npx algo install -y; npx algo run
+
+# Con directorio
+Set-Location C:\Projects\tu-repo; npm run build
+```

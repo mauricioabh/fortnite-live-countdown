@@ -1,0 +1,53 @@
+{
+  "name": "fortnite-live-countdown",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo run test",
+    "test:e2e": "npm run test:e2e --prefix apps/web",
+    "db:migrate": "npm run db:migrate --prefix apps/web",
+    "db:generate": "npm run db:generate --prefix apps/web",
+    "db:studio": "npm run db:studio --prefix apps/web",
+    "release": "changelogen --release",
+    "changelog": "changelogen",
+    "prepare": "husky",
+    "generate-assets": "tsx scripts/generate-assets.ts"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@fission-ai/openspec": "^1.2.0",
+    "changelogen": "^0.5.7",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "png-to-ico": "^3.0.1",
+    "prettier": "^3.4.2",
+    "sharp": "^0.34.5",
+    "tsx": "^4.21.0",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  },
+  "lint-staged": {
+    "apps/web/**/*.{ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "packageManager": "npm@10.9.2",
+  "engines": {
+    "node": ">=20"
+  },
+  "overrides": {
+    "@types/node": "^20.19.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  }
+}

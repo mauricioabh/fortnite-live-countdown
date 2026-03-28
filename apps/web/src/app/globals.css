@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  CSS variables mirror packages/ui/src/tokens/index.ts (semantic + heat).
+  Prefer editing tokens and tailwind.config.ts; keep these in sync for inline styles / future shadcn.
+*/
+:root {
+  --background: #050508;
+  --foreground: #f4f4f5;
+  --muted: #a1a1aa;
+  --muted-foreground: #71717a;
+  --card: #0c0c0f;
+  --card-foreground: #f4f4f5;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #3b82f6;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #18181b;
+  --secondary-foreground: #fafafa;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --heat-red-intense: #b91c1c;
+  --heat-red-soft: #f87171;
+  --heat-orange-intense: #c2410c;
+  --heat-orange-soft: #fdba74;
+  --heat-blue-intense: #1d4ed8;
+  --heat-blue-soft: #93c5fd;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
