@@ -2,6 +2,7 @@
   "name": "fortnite-live-countdown",
   "private": true,
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
