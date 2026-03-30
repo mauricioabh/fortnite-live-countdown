@@ -31,7 +31,9 @@ jobs:
           node-version: "20"
           cache: npm
       - run: npm ci
-      # next dev resolves @fortnite-live-countdown/* via package exports → dist/; must exist before webServer starts
+      # Build shared packages (dist/ needed by Next) then the Next app itself.
+      # Playwright uses `next start` in CI so the server boots instantly.
       - run: npx turbo run build --filter=@fortnite-live-countdown/types --filter=@fortnite-live-countdown/utils --filter=@fortnite-live-countdown/ui
+      - run: npx turbo run build --filter=web
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e -w web

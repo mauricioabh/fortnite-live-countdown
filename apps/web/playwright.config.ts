@@ -13,13 +13,13 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "npm run dev",
+    // In CI: use `next start` (production build already done by workflow) — starts instantly.
+    // Locally: use `npm run dev` for hot-reload convenience.
+    command: process.env.CI ? "npx next start" : "npm run dev",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 30_000,
     cwd: __dirname,
-    // Explicit env so the Next dev server (child process) receives CI secrets;
-    // default inheritance can be unreliable with npm workspaces / monorepo.
     env: {
       ...process.env,
       SKIP_ENV_VALIDATION: process.env.SKIP_ENV_VALIDATION ?? "1",
