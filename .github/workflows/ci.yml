@@ -14,7 +14,7 @@ jobs:
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_placeholder_must_replace_in_production_00
       CLERK_SECRET_KEY: sk_test_placeholder_must_replace_in_production_00000000
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
