@@ -16,6 +16,7 @@ export default defineConfig({
     command: "npm run dev",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
     cwd: __dirname,
     // Explicit env so the Next dev server (child process) receives CI secrets;
     // default inheritance can be unreliable with npm workspaces / monorepo.
