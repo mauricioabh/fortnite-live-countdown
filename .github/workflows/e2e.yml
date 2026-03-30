@@ -1,0 +1,59 @@
+# Playwright E2E against a production Next.js build.
+# Required repository secrets (Settings → Secrets → Actions):
+#   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY  (pk_test_… from Clerk Dashboard, Development instance)
+#   CLERK_SECRET_KEY                   (sk_test_… same instance)
+name: E2E
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: "1"
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require Clerk secrets
+        env:
+          PK: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          SK: ${{ secrets.CLERK_SECRET_KEY }}
+        run: |
+          if [ -z "$PK" ] || [ -z "$SK" ]; then
+            echo "::error::Add NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY as repository secrets."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci
+
+      # Build shared packages (dist/ needed by Next) then Next itself
+      - run: npx turbo run build --filter=@fortnite-live-countdown/types --filter=@fortnite-live-countdown/utils --filter=@fortnite-live-countdown/ui
+      - run: npx turbo run build --filter=web
+
+      # Start production server in background; wait up to 30s for it to be ready
+      - name: Start Next.js production server
+        working-directory: apps/web
+        run: npm run start &
+
+      - name: Wait for Next.js to be ready
+        run: |
+          for i in $(seq 1 30); do
+            curl -s http://localhost:3000 > /dev/null && echo "Server ready after ${i}s" && exit 0
+            sleep 1
+          done
+          echo "::error::Next.js server did not become ready in 30s" && exit 1
+
+      - run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        working-directory: apps/web
+        run: npx playwright test

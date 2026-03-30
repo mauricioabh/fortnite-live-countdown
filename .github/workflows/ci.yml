@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: "1"
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_placeholder_must_replace_in_production_00
+      CLERK_SECRET_KEY: sk_test_placeholder_must_replace_in_production_00000000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npx turbo run build lint test --filter=web
+      - run: npx turbo run build --filter=@fortnite-live-countdown/types
+      - run: npx turbo run build --filter=@fortnite-live-countdown/utils

@@ -1,0 +1,42 @@
+---
+description: Contexto del proyecto Fortnite Live Countdown (monorepo web + Expo)
+globs:
+alwaysApply: true
+---
+
+# Fortnite Live Countdown
+
+## Qué es
+
+Dashboard de monitoreo con **cuenta atrás en UTC** para múltiples hitos de Fortnite. Los datos en pantalla vienen de **Neon** tras un **cron diario** que ingiere [fortnite-api.com](https://fortnite-api.com) (`/v2/seasons`, `/v2/news`, `/v2/shop/br`). La cantidad de **hero banners es N** = eventos persistidos. Colores: gradiente continuo de urgencia **rojo intenso → rojo tenue → naranja intenso → naranja tenue → azul intenso → azul tenue**. Contadores: hook `useCountdown`, tick 1s, cleanup del interval.
+
+## Arquitectura
+
+- **Turborepo:** `apps/web` (Next.js App Router), `apps/mobile` (Expo Router), `packages/types`, `packages/utils`.
+- Mobile **no** habla con Neon; consume `EXPO_PUBLIC_API_URL` (API Next).
+
+## Stack
+
+- Next.js 15+, TypeScript, Tailwind, shadcn/ui, Zustand, TanStack Query, Zod, React Hook Form.
+- **Clerk:** web `@clerk/nextjs`, mobile `@clerk/clerk-expo` — **email/contraseña + Google** (`/sign-in`, `/sign-up`).
+- **Neon + Drizzle:** `apps/web/src/db/schema.ts` — tablas `fortnite_event`, `ingestion_run`.
+- **date-fns** para diferencias en **UTC** frente a `Date.now()` y `target_at`.
+- Vercel + **Cron** protegido con `CRON_SECRET`.
+- Fase 2: notificaciones web + Expo push.
+
+## Rutas clave (web)
+
+- `/` dashboard, `/sign-in`, `/sign-up`, `/api/cron/ingest-fortnite`, `/api/events` (nombres orientativos).
+
+## Variables de entorno
+
+Ver `docs/ENV.md`: Clerk, `DATABASE_URL`, `CRON_SECRET`, `FORTNITE_API_KEY`, Sentry, `EXPO_PUBLIC_*`.
+
+## Testing
+
+- Vitest: tiempo UTC, heat, ordenación, parseo Zod de ingest.
+- Playwright: dashboard + responsive.
+
+## Documentación
+
+- `docs/PRD.md`, `docs/SCREENS.md`, `docs/DATA_MODEL.md`, `docs/TECH_STACK.md`, `docs/TESTING.md`, `docs/ENV.md`, `docs/CONTRIBUTING.md`.
