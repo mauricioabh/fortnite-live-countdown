@@ -8,21 +8,18 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: "http://localhost:3000",
     trace: "on-first-retry",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: {
-    // In CI: use `next start` (production build already done by workflow) — starts instantly.
-    // Locally: use `npm run dev` for hot-reload convenience.
-    command: process.env.CI ? "npx next start" : "npm run dev",
-    url: "http://127.0.0.1:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 30_000,
-    cwd: __dirname,
-    env: {
-      ...process.env,
-      SKIP_ENV_VALIDATION: process.env.SKIP_ENV_VALIDATION ?? "1",
+  // In CI the server is started by the workflow (next start &) before running Playwright.
+  // Locally, we start it automatically via webServer for convenience.
+  ...(!process.env.CI && {
+    webServer: {
+      command: "npm run dev",
+      url: "http://localhost:3000",
+      reuseExistingServer: true,
+      cwd: __dirname,
     },
-  },
+  }),
 });
