@@ -19,7 +19,7 @@ Monorepo **Turborepo**: `apps/web` (Next.js App Router), `apps/mobile` (Expo Rou
 
 ### Componentes principales (web)
 
-- `AppHeader` — logo + título _Fortnite Live Countdown_.
+- `AppHeader` — logo + título _Live countdown for Fortnite_.
 - `EventHeroBanner` — props: títulos, `targetEndUtc`, metadata, clase de “heat”, `isTopPriority` (pulse).
 - `ShopOffersGrid` — cards estilo tienda (imagen si hay URL), categorías por `brItems.type`, cuenta atrás.
 - `HistorialPage` — tabla de filas archivadas tras ingesta.

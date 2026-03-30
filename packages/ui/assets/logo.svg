@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" role="img" aria-label="Fortnite Live Countdown">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" role="img" aria-label="Live countdown for Fortnite">
   <defs>
     <linearGradient id="flc-heat-h" x1="0%" y1="50%" x2="100%" y2="50%">
       <stop offset="0%" stop-color="#b91c1c"/>
@@ -33,7 +33,7 @@
     font-weight="700"
     letter-spacing="-0.02em"
   >
-    Fortnite Live Countdown
+    Live countdown for Fortnite
   </text>
   <text
     x="168"

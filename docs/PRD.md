@@ -1,6 +1,6 @@
 # Product Requirements Document (PRD)
 
-## Fortnite Live Countdown
+## Live countdown for Fortnite
 
 ### Resumen
 
