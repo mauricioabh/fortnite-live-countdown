@@ -1,5 +1,6 @@
 {
   "name": "fortnite-live-countdown",
+  "description": "Live countdown for Fortnite.",
   "private": true,
   "workspaces": [
     "apps/*",

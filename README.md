@@ -1,4 +1,4 @@
-# Fortnite Live Countdown
+# Live countdown for Fortnite
 
 Monorepo (Turborepo): dashboard web **Next.js** + app **Expo**, datos en **Neon** tras ingesta diaria desde fortnite-api. Documentación en [`docs/`](docs/).
 

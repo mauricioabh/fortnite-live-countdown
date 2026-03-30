@@ -1,10 +1,10 @@
 ---
-description: Contexto del proyecto Fortnite Live Countdown (monorepo web + Expo)
+description: Contexto del proyecto Live countdown for Fortnite (monorepo web + Expo)
 globs:
 alwaysApply: true
 ---
 
-# Fortnite Live Countdown
+# Live countdown for Fortnite
 
 ## Qué es
 
