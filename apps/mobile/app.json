@@ -8,23 +8,37 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "plugins": ["expo-router", "expo-secure-store", "expo-web-browser"],
+    "notification": {
+      "icon": "./assets/android-icon-monochrome.png",
+      "color": "#3b82f6"
+    },
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#3b82f6"
     },
     "ios": {
+      "bundleIdentifier": "com.wayool.livecountdownfortnite",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.wayool.livecountdownfortnite",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#050508"
       },
+      "versionCode": 1,
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a6435f98-a320-42c1-ae9b-7dba1403bb4b"
+      }
+    },
+    "owner": "mauricioabh"
   }
 }
