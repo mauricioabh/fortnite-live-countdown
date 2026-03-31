@@ -31,3 +31,7 @@ apps/mobile/assets/icon.png
 apps/mobile/assets/adaptive-icon.png
 apps/mobile/assets/splash-icon.png
 apps/mobile/assets/favicon.png
+
+# Android Play signing — never commit (belt-and-suspenders if android/ is tracked)
+apps/mobile/android/keystore.properties
+apps/mobile/android/release.keystore
