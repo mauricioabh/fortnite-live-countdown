@@ -15,7 +15,7 @@ jobs:
       CLERK_SECRET_KEY: sk_test_placeholder_must_replace_in_production_00000000
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
           cache: npm
