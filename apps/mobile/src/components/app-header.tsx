@@ -24,8 +24,8 @@ export const AppHeader = ({
         <Image source={LOGO} style={styles.logo} accessibilityIgnoresInvertColors />
         <View style={styles.titles}>
           <View style={styles.titleRow}>
-            <Text style={styles.fortnite}>FORTNITE</Text>
-            <Text style={styles.live}>LIVE COUNTDOWN</Text>
+            <Text style={styles.fortnite}>LIVE COUNTDOWN:</Text>
+            <Text style={styles.live}>FOR FORTNITE FANS</Text>
           </View>
           {sectionHint ? <Text style={styles.hint}>{sectionHint}</Text> : null}
           {isEventsLoading || lastIngestLabel ? (

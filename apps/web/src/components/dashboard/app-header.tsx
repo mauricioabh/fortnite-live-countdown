@@ -43,10 +43,10 @@ export const AppHeader = ({
               className="inline-block -skew-x-[4deg] font-black italic leading-none tracking-[-0.02em] text-white drop-shadow-[0_2px_0_rgba(0,0,0,0.65)] sm:text-[1.65rem]"
               style={{ WebkitTextStroke: "0.3px rgba(0,0,0,0.35)" }}
             >
-              FORTNITE
+              LIVE COUNTDOWN:
             </span>
             <span className="text-base font-semibold tracking-tight text-muted-foreground sm:text-xl">
-              LIVE COUNTDOWN
+              FOR FORTNITE FANS
             </span>
           </h1>
           {sectionHint ? (
