@@ -21,8 +21,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Live countdown for Fortnite",
-  description: "Live countdown for Fortnite milestones in your local time.",
+  title: "Live Countdown: for Fortnite Fans",
+  description:
+    "Live countdowns for Fortnite milestones and shop resets, built for fans.",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",

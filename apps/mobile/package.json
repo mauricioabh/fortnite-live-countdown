@@ -1,7 +1,7 @@
 {
   "name": "mobile",
   "version": "1.0.0",
-  "description": "Live countdown for Fortnite.",
+  "description": "Live Countdown: for Fortnite Fans.",
   "main": "expo-router/entry",
   "private": true,
   "scripts": {
