@@ -54,13 +54,13 @@ const clerkAppearance = {
 const clerkLocalization = {
   signIn: {
     start: {
-      title: "Sign in to Live countdown: for fortnite fans",
+      title: "Sign in to Live countdown: for Fortnite fans",
       subtitle: "Welcome back! Please sign in to continue",
     },
   },
   signUp: {
     start: {
-      title: "Sign up for Live countdown: for fortnite fans",
+      title: "Sign up for Live countdown: for Fortnite fans",
       subtitle: "Create your account to continue",
     },
   },
@@ -88,6 +88,8 @@ export default function RootLayout({
     <ClerkProvider
       appearance={clerkAppearance}
       localization={clerkLocalization}
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
     >
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
