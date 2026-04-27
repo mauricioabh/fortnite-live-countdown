@@ -20,6 +20,52 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const clerkAppearance = {
+  variables: {
+    colorBackground: "#0c0c0f",
+    colorInputBackground: "#050508",
+    colorInputText: "#f4f4f5",
+    colorText: "#f4f4f5",
+    colorTextSecondary: "#a1a1aa",
+    colorPrimary: "#3b82f6",
+    colorDanger: "#ef4444",
+    colorSuccess: "#22c55e",
+    colorNeutral: "#27272a",
+    borderRadius: "0.5rem",
+  },
+  elements: {
+    card: "bg-card border border-border shadow-none",
+    footer: "bg-card border-t border-border",
+    footerActionText: "text-muted-foreground",
+    footerActionLink: "text-primary hover:text-primary",
+    socialButtonsBlockButton:
+      "border border-border bg-background text-foreground hover:bg-secondary",
+    socialButtonsBlockButtonText: "text-foreground",
+    dividerLine: "bg-border",
+    dividerText: "text-muted-foreground",
+    formFieldLabel: "text-foreground",
+    formFieldInput:
+      "border border-input bg-background text-foreground focus:border-primary focus:ring-primary",
+    formButtonPrimary:
+      "bg-primary text-primary-foreground hover:bg-primary/90 shadow-none",
+  },
+};
+
+const clerkLocalization = {
+  signIn: {
+    start: {
+      title: "Sign in to Live countdown: for fortnite fans",
+      subtitle: "Welcome back! Please sign in to continue",
+    },
+  },
+  signUp: {
+    start: {
+      title: "Sign up for Live countdown: for fortnite fans",
+      subtitle: "Create your account to continue",
+    },
+  },
+};
+
 export const metadata: Metadata = {
   title: "Live Countdown: for Fortnite Fans",
   description:
@@ -39,7 +85,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={clerkAppearance}
+      localization={clerkLocalization}
+    >
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <QueryProvider>{children}</QueryProvider>
