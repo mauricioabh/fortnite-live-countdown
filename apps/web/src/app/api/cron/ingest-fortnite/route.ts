@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
@@ -49,6 +50,13 @@ export async function GET(request: Request) {
   const { rows, errors } = await buildIngestRows(env.FORTNITE_API_KEY);
 
   if (rows.length === 0) {
+    if (errors.length > 0) {
+      Sentry.captureMessage("Fortnite ingest produced no rows", {
+        level: "error",
+        tags: { route: "cron/ingest-fortnite" },
+        extra: { errors },
+      });
+    }
     await db
       .update(ingestionRuns)
       .set({
@@ -112,6 +120,9 @@ export async function GET(request: Request) {
     });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
+    Sentry.captureException(e instanceof Error ? e : new Error(message), {
+      tags: { route: "cron/ingest-fortnite" },
+    });
     await db
       .update(ingestionRuns)
       .set({

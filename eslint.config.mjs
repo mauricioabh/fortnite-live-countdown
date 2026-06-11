@@ -1,21 +1,29 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-import tseslint from "typescript-eslint";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
 
-export default defineConfig([
-  globalIgnores([
-    "**/.next/**",
-    "**/dist/**",
-    "**/node_modules/**",
-    "apps/mobile/**",
-  ]),
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+export default [
   {
-    files: ["apps/web/**/*.{ts,tsx}"],
-    extends: [...nextVitals, ...nextTs],
+    ignores: [
+      "**/.next/**",
+      "**/dist/**",
+      "**/node_modules/**",
+      "apps/mobile/**",
+    ],
   },
+  ...compat.extends("next/core-web-vitals", "next/typescript").map((config) => ({
+    ...config,
+    files: ["apps/web/**/*.{ts,tsx}"],
+  })),
   {
     files: ["packages/**/*.{ts,tsx}"],
-    extends: [...tseslint.configs.recommended],
+    extends: ["plugin:@typescript-eslint/recommended"],
   },
-]);
+];

@@ -53,7 +53,7 @@ La base del **PASO 6** del onboarding está aplicada: monorepo, web con Clerk (s
 3. **Ingesta diaria:** implementar `GET/POST /api/cron/ingest-fortnite` con validación de `CRON_SECRET`, llamadas a `/v2/seasons`, `/v2/news`, `/v2/shop/br` y upsert a `fortnite_event`.
 4. **UI del dashboard:** banners dinámicos, gradiente de color por proximidad, `useCountdown`, Tienda BR (todas las ofertas).
 5. **Mobile:** añadir `@clerk/clerk-expo`, Expo Router auth, NativeWind (o tu capa de estilos), consumo de `EXPO_PUBLIC_API_URL`.
-6. **Sentry:** `npx @sentry/wizard@latest -i nextjs` (no ejecutado aquí por ser interactivo); luego `SENTRY_DSN` en env.
+6. **Sentry:** `@sentry/nextjs` is configured in `apps/web`; set `SENTRY_DSN` in `.env.local`.
 7. **shadcn/ui:** `npx shadcn@latest init` en `apps/web` cuando quieras el kit de componentes.
 8. **Vercel:** proyecto enlazado a `apps/web`, Cron apuntando al endpoint de ingesta.
 
@@ -62,4 +62,6 @@ Detalle de producto y stack: [docs/PRD.md](docs/PRD.md), [docs/TECH_STACK.md](do
 ## Production practices
 
 - **Pre-commit:** Husky at monorepo root runs lint-staged (`eslint --fix`, `prettier --write`) on staged `*.ts` / `*.tsx`.
-- **Observability:** Sentry planned — set `SENTRY_DSN` in `apps/web/.env.local` after creating the `fortnite-live-countdown` project in Sentry.
+- **Validation:** Zod schemas for env (`apps/web/src/env.ts`) and Fortnite API ingest payloads (`apps/web/src/lib/fortnite/schemas.ts`).
+- **E2E / CI:** Playwright in `apps/web/e2e/`; `npm run test:e2e` locally; GitHub Actions workflow `.github/workflows/e2e.yml` builds Next.js and runs Chromium tests on pull requests (requires Clerk test secrets in repo Actions settings).
+- **Observability:** `@sentry/nextjs` captures cron ingest failures on `/api/cron/ingest-fortnite`. Set `SENTRY_DSN` in `apps/web/.env.local`. Dev probe: `GET /api/debug/sentry` (non-production only).
