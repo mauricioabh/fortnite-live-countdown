@@ -58,3 +58,8 @@ La base del **PASO 6** del onboarding está aplicada: monorepo, web con Clerk (s
 8. **Vercel:** proyecto enlazado a `apps/web`, Cron apuntando al endpoint de ingesta.
 
 Detalle de producto y stack: [docs/PRD.md](docs/PRD.md), [docs/TECH_STACK.md](docs/TECH_STACK.md), [docs/ENV.md](docs/ENV.md).
+
+## Production practices
+
+- **Pre-commit:** Husky at monorepo root runs lint-staged (`eslint --fix`, `prettier --write`) on staged `*.ts` / `*.tsx`.
+- **Observability:** Sentry planned — set `SENTRY_DSN` in `apps/web/.env.local` after creating the `fortnite-live-countdown` project in Sentry.
