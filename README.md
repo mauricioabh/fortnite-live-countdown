@@ -64,4 +64,4 @@ Detalle de producto y stack: [docs/PRD.md](docs/PRD.md), [docs/TECH_STACK.md](do
 - **Pre-commit:** Husky at monorepo root runs lint-staged (`eslint --fix`, `prettier --write`) on staged `*.ts` / `*.tsx`.
 - **Validation:** Zod schemas for env (`apps/web/src/env.ts`) and Fortnite API ingest payloads (`apps/web/src/lib/fortnite/schemas.ts`).
 - **E2E / CI:** Playwright in `apps/web/e2e/`; `npm run test:e2e` locally; GitHub Actions workflow `.github/workflows/e2e.yml` builds Next.js and runs Chromium tests on pull requests (requires Clerk test secrets in repo Actions settings).
-- **Observability:** `@sentry/nextjs` captures cron ingest failures on `/api/cron/ingest-fortnite`. Set `SENTRY_DSN` in `apps/web/.env.local`. Dev probe: `GET /api/debug/sentry` (non-production only).
+- **Observability:** `@sentry/nextjs` captures cron ingest failures on `/api/cron/ingest-fortnite`. Set `SENTRY_DSN` in `apps/web/.env.local`. Dev probe: `GET /api/debug/sentry` (disabled when `VERCEL_ENV=production`); verify with `cd apps/web && npm run test:observability`.

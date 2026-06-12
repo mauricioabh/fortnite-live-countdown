@@ -14,7 +14,8 @@
     "db:studio": "drizzle-kit studio",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:observability": "playwright test observability.spec.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.12.0",
