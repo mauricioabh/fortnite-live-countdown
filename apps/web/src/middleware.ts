@@ -9,6 +9,8 @@ const isPublicRoute = createRouteMatcher([
   "/api/debug/sentry",
   "/api/events(.*)",
   "/api/shop(.*)",
+  // Handler returns 401 when unauthenticated; avoid middleware HTML 404 on API clients.
+  "/api/favorites(.*)",
 ]);
 
 export default clerkMiddleware(
