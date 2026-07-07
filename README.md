@@ -1,5 +1,31 @@
 # Live Countdown: for Fortnite Fans
 
+## What is Live Countdown?
+
+Live countdown timers for Fortnite milestones—season ends, item shop resets, and major events—updated daily from fortnite-api data and shown on a fan-focused dashboard.
+
+**Live:** https://fortnite-live-countdown.vercel.app
+
+## Who is it for?
+
+Fortnite players who want at-a-glance timers for shop rotations, season boundaries, and event windows without digging through in-game menus.
+
+## FAQ
+
+### What countdowns does it show?
+
+The dashboard tracks active Fortnite seasons, daily item shop resets, and scheduled events ingested from fortnite-api.com.
+
+### Do I need an account?
+
+Browsing public countdowns and the BR shop does not require sign-in. Favorites and personal history require a free Clerk account.
+
+### How often is data updated?
+
+A Vercel cron job ingests fresh Fortnite API data daily; countdowns refresh from that store on each page load.
+
+---
+
 Monorepo (Turborepo): dashboard web **Next.js** + app **Expo**, datos en **Neon** tras ingesta diaria desde fortnite-api. Documentación en [`docs/`](docs/).
 
 ## Requisitos
