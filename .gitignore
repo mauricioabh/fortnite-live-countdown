@@ -20,6 +20,7 @@ npm-debug.log*
 coverage
 playwright-report
 test-results
+apps/web/playwright/.clerk/
 .vercel
 
 # Assets generados (se regeneran con npm run generate-assets)

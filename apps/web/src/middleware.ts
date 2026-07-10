@@ -3,11 +3,16 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
+  "/robots.txt",
+  "/sitemap.xml",
   "/data-request(.*)",
   "/privacy-policy(.*)",
   "/api/cron(.*)",
+  "/api/debug/sentry",
   "/api/events(.*)",
   "/api/shop(.*)",
+  // Handler returns 401 when unauthenticated; avoid middleware HTML 404 on API clients.
+  "/api/favorites(.*)",
 ]);
 
 export default clerkMiddleware(

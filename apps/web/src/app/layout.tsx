@@ -1,10 +1,12 @@
-import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { JsonLd } from "@/components/seo/JsonLd";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { webApplicationJsonLd } from "@/lib/seo/json-ld";
+import { rootLayoutMetadata } from "@/lib/seo/metadata";
 
 import "./globals.css";
 
@@ -66,18 +68,7 @@ const clerkLocalization = {
   },
 };
 
-export const metadata: Metadata = {
-  title: "Live Countdown: for Fortnite Fans",
-  description:
-    "Live countdowns for Fortnite milestones and shop resets, built for fans.",
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
-  openGraph: {
-    images: ["/og-image.png"],
-  },
-};
+export const metadata = rootLayoutMetadata();
 
 export default function RootLayout({
   children,
@@ -92,6 +83,9 @@ export default function RootLayout({
       signUpUrl="/sign-up"
     >
       <html lang="en">
+        <head>
+          <JsonLd data={webApplicationJsonLd()} />
+        </head>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <QueryProvider>{children}</QueryProvider>
           <Analytics />
