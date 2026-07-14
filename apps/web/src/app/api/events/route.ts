@@ -15,6 +15,7 @@ import {
   buildNewsMotdImageMapFromJson,
   shopEntryImageUrl,
 } from "@/lib/fortnite/fortnite-images";
+import { dedupeShopEventsForDashboard } from "@/lib/fortnite/shop-rotation";
 
 export const dynamic = "force-dynamic";
 
@@ -139,7 +140,7 @@ export async function GET() {
       .limit(1);
 
     const lastRow = last[0];
-    const mapped = rows.map(mapEventRowToDto);
+    const mapped = dedupeShopEventsForDashboard(rows).map(mapEventRowToDto);
     const events = await hydrateEventBackgrounds(mapped, env.FORTNITE_API_KEY);
     const body: EventsApiResponse = {
       events,
