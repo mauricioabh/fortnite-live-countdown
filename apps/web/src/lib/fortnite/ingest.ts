@@ -11,6 +11,7 @@ import {
   shopEntryImageUrl,
 } from "@/lib/fortnite/fortnite-images";
 import { newsResponseSchema, shopResponseSchema } from "@/lib/fortnite/schemas";
+import { SHOP_ROTATION_EXTERNAL_KEY } from "@/lib/fortnite/shop-rotation";
 
 const BASE = "https://fortnite-api.com";
 
@@ -337,7 +338,7 @@ export async function buildIngestRows(
       typeof data.vbuckIcon === "string" ? data.vbuckIcon : null;
 
     rows.push({
-      externalKey: `shop:rotation:${data.hash}`,
+      externalKey: SHOP_ROTATION_EXTERNAL_KEY,
       kind: "shop" satisfies FortniteEventKind,
       title: "Item Shop rotation",
       subtitle: `BR • ${data.date.slice(0, 10)}`,
