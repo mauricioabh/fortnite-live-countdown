@@ -4,7 +4,10 @@ import { NextResponse } from "next/server";
 
 import { ingestionRuns, fortniteEvents } from "@/db/schema";
 import { env } from "@/env";
-import { archiveStaleFortniteEvents } from "@/lib/db/archive-stale-events";
+import {
+  archiveStaleFortniteEvents,
+  archiveSupersededShopRotations,
+} from "@/lib/db/archive-stale-events";
 import { getDb } from "@/lib/db";
 import { buildIngestRows } from "@/lib/fortnite/ingest";
 
@@ -99,6 +102,7 @@ export async function GET(request: Request) {
         });
     }
 
+    const archivedSupersededShop = await archiveSupersededShopRotations(db);
     const archived = await archiveStaleFortniteEvents(db);
 
     const status = errors.length > 0 ? "partial" : "success";
@@ -116,6 +120,7 @@ export async function GET(request: Request) {
       ok: true,
       eventsUpserted: rows.length,
       archived,
+      archivedSupersededShop,
       warnings: errors,
     });
   } catch (e) {
