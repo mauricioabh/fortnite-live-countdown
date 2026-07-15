@@ -1,11 +1,21 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE_PATH,
   SITE_NAME,
+  SITE_THEME_COLOR,
   allowSearchIndexing,
   getSiteUrl,
 } from "@/lib/seo/site";
+
+export function rootLayoutViewport(): Viewport {
+  return {
+    themeColor: SITE_THEME_COLOR,
+    viewportFit: "cover",
+    width: "device-width",
+    initialScale: 1,
+  };
+}
 
 export type PageMetadataInput = {
   title: string;
@@ -106,8 +116,20 @@ export function rootLayoutMetadata(): Metadata {
       images: [DEFAULT_OG_IMAGE_PATH],
     },
     icons: {
-      icon: "/favicon.ico",
+      icon: [
+        { url: "/favicon.ico" },
+        { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+        { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      ],
       apple: "/apple-touch-icon.png",
+    },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "black-translucent",
+      title: SITE_NAME,
+    },
+    other: {
+      "mobile-web-app-capable": "yes",
     },
   };
 }

@@ -338,7 +338,7 @@ function CountdownCell({
 
   return (
     <motion.div
-      className="relative isolate flex min-h-[4rem] min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-xl border-2 border-white/15 px-1.5 py-1 shadow-lg sm:min-h-[4.25rem] sm:px-2 sm:py-1.5"
+      className="relative isolate flex min-h-[4.5rem] min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-xl border-2 border-white/15 px-1 py-1.5 shadow-lg sm:min-h-[4.75rem] sm:px-2 sm:py-1.5"
       aria-label={ariaLabel}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
@@ -373,8 +373,8 @@ function CountdownCell({
       />
 
       <div className="relative z-10 flex w-full flex-col items-center justify-center gap-0.5">
-        <div className="relative w-full overflow-hidden rounded-md px-1 py-0.5 sm:px-1.5 sm:py-0.5">
-          <div className="relative flex min-h-[1.55rem] w-full items-center justify-center sm:min-h-[1.7rem]">
+        <div className="relative w-full overflow-hidden rounded-md px-0.5 py-0.5 sm:px-1.5 sm:py-0.5">
+          <div className="relative flex min-h-[1.85rem] w-full items-center justify-center sm:min-h-[2rem]">
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span
                 key={value}
@@ -382,9 +382,9 @@ function CountdownCell({
                 animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
                 exit={{ y: -8, opacity: 0, filter: "blur(3px)" }}
                 transition={{ type: "spring", stiffness: 520, damping: 32 }}
-                className={`${countdownDigital.className} absolute font-bold tabular-nums tracking-[0.12em] text-[#e8f4ff]`}
+                className={`${countdownDigital.className} absolute font-bold tabular-nums tracking-[0.08em] text-[#e8f4ff] sm:tracking-[0.12em]`}
                 style={{
-                  fontSize: "clamp(1.1rem, 2.8vw, 1.75rem)",
+                  fontSize: "clamp(1.25rem, 4.2vw, 1.75rem)",
                   lineHeight: 1,
                   textShadow: `
                     0 0 1px rgba(255,255,255,0.9),
@@ -399,7 +399,7 @@ function CountdownCell({
             </AnimatePresence>
           </div>
         </div>
-        <span className="max-w-full text-center text-[7px] font-semibold uppercase leading-tight tracking-wide text-white/80 sm:text-[8px] md:text-[9px]">
+        <span className="max-w-full text-center text-xs font-semibold uppercase leading-tight tracking-wide text-white/85">
           {unitLabel}
         </span>
       </div>

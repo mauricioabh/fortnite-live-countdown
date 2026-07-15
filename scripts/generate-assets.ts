@@ -69,6 +69,43 @@ async function main(): Promise<void> {
   await sharp(isotipoBuf).resize(180, 180).png().toFile(apple);
   log(`wrote ${path.relative(ROOT, apple)}`);
 
+  const darkBg = { r: 12, g: 12, b: 15, alpha: 1 };
+
+  async function writePwaIcon(
+    size: number,
+    outName: string,
+    logoRatio: number,
+  ): Promise<void> {
+    const outPath = path.join(WEB_PUBLIC, outName);
+    const logoSize = Math.round(size * logoRatio);
+    const canvas = await sharp({
+      create: {
+        width: size,
+        height: size,
+        channels: 4,
+        background: darkBg,
+      },
+    })
+      .composite([
+        {
+          input: await sharp(isotipoBuf)
+            .resize(logoSize, logoSize)
+            .png()
+            .toBuffer(),
+          gravity: "center",
+        },
+      ])
+      .png()
+      .toBuffer();
+    await sharp(canvas).png().toFile(outPath);
+    log(`wrote ${path.relative(ROOT, outPath)}`);
+  }
+
+  // Standard PWA icons (~full canvas); maskable keeps ~40% safe-zone padding.
+  await writePwaIcon(192, "icon-192.png", 0.72);
+  await writePwaIcon(512, "icon-512.png", 0.72);
+  await writePwaIcon(512, "icon-512-maskable.png", 0.55);
+
   await sharp(ogBuf).resize(1200, 630).png().toFile(ogOut);
   log(`wrote ${path.relative(ROOT, ogOut)}`);
 
