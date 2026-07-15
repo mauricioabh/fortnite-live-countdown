@@ -36,6 +36,13 @@
 | `@sentry/nextjs`                               | latest                 | Errores producción web                              |
 | `@vercel/analytics` / `@vercel/speed-insights` | latest                 | Métricas Vercel                                     |
 
+## Web PWA (instalable)
+
+- **Manifest:** `apps/web/src/app/manifest.ts` (`display: standalone`, `start_url: /`).
+- **Iconos:** generados por `scripts/generate-assets.ts` → `icon-192.png`, `icon-512.png`, `icon-512-maskable.png` en `apps/web/public`.
+- **Service worker:** `apps/web/public/sw.js` — registrado solo en producción (`ServiceWorkerRegister`); offline mínimo (assets + `/offline`), sin cachear APIs ni el dashboard autenticado.
+- **Probar install:** origen HTTPS (preview/producción). Android Chrome: Install / Add to Home Screen. iOS Safari: Share → Add to Home Screen. Offline: visit once online, then airplane mode → navegación debe mostrar `/offline`.
+
 ## Fase 2
 
 | Pieza                   | Uso                      |

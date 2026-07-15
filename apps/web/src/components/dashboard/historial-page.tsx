@@ -50,7 +50,7 @@ export const HistorialPage = () => {
       ) : null}
 
       {q.isSuccess ? (
-        <div className="overflow-x-auto rounded-xl border border-border bg-card/40 shadow-sm backdrop-blur-sm">
+        <div className="min-w-0 max-w-full overflow-x-auto rounded-xl border border-border bg-card/40 shadow-sm backdrop-blur-sm [-webkit-overflow-scrolling:touch]">
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
             <thead>
               <tr className="border-b border-border bg-secondary/30 font-mono text-xs uppercase tracking-wide text-muted-foreground">

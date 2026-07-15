@@ -3,10 +3,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { JsonLd } from "@/components/seo/JsonLd";
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { webApplicationJsonLd } from "@/lib/seo/json-ld";
-import { rootLayoutMetadata } from "@/lib/seo/metadata";
+import { rootLayoutMetadata, rootLayoutViewport } from "@/lib/seo/metadata";
 
 import "./globals.css";
 
@@ -69,6 +70,7 @@ const clerkLocalization = {
 };
 
 export const metadata = rootLayoutMetadata();
+export const viewport = rootLayoutViewport();
 
 export default function RootLayout({
   children,
@@ -88,6 +90,7 @@ export default function RootLayout({
         </head>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <QueryProvider>{children}</QueryProvider>
+          <ServiceWorkerRegister />
           <Analytics />
           <SpeedInsights />
         </body>

@@ -27,12 +27,12 @@ export default defineConfig({
     },
     {
       name: "chromium",
-      testMatch: /(ejemplo|observability|auth-guest)\.spec\.ts/,
+      testMatch: /(ejemplo|observability|auth-guest|mobile-shell)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "chromium-authenticated",
-      testMatch: /auth\.spec\.ts/,
+      testMatch: /(auth|mobile-shell)\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         storageState: authFile,

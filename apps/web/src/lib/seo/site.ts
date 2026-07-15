@@ -1,5 +1,11 @@
 export const SITE_NAME = "Live Countdown: for Fortnite Fans";
 
+/** Short name for Web App Manifest / home-screen labels. */
+export const SITE_SHORT_NAME = "Live Countdown";
+
+/** Dark shell background / PWA theme (matches Clerk appearance). */
+export const SITE_THEME_COLOR = "#0c0c0f";
+
 export const DEFAULT_DESCRIPTION =
   "Live countdowns for Fortnite milestones and shop resets, built for fans.";
 
