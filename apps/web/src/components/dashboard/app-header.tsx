@@ -16,16 +16,20 @@ const UserButton = dynamic(
   },
 );
 
-export const AppHeader = ({
-  isEventsLoading,
-  lastIngestLabel,
-  sectionHint = null,
-}: {
-  isEventsLoading: boolean;
-  lastIngestLabel: string | null;
-  /** Optional subtitle for the current section (e.g. Jam tracks). */
+interface AppHeaderProps {
+  /** Full status line (loading copy or last-updated). Parent owns the wording. */
+  statusLabel?: string | null;
+  /** Pulse animation for loading-style status labels. */
+  isStatusLoading?: boolean;
+  /** Optional subtitle for the current section (e.g. News, Jam tracks). */
   sectionHint?: string | null;
-}) => {
+}
+
+export const AppHeader = ({
+  statusLabel = null,
+  isStatusLoading = false,
+  sectionHint = null,
+}: AppHeaderProps) => {
   return (
     <header className="mb-8 flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex min-w-0 items-start gap-3">
@@ -54,12 +58,12 @@ export const AppHeader = ({
               {sectionHint}
             </p>
           ) : null}
-          {isEventsLoading || lastIngestLabel ? (
+          {statusLabel ? (
             <p className="mt-1 font-mono text-xs text-muted-foreground sm:text-sm">
-              {isEventsLoading ? (
-                <span className="animate-pulse">Loading events…</span>
+              {isStatusLoading ? (
+                <span className="animate-pulse">{statusLabel}</span>
               ) : (
-                lastIngestLabel
+                statusLabel
               )}
             </p>
           ) : null}

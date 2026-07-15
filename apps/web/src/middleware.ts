@@ -10,6 +10,7 @@ const isPublicRoute = createRouteMatcher([
   "/api/cron(.*)",
   "/api/debug/sentry",
   "/api/events(.*)",
+  "/api/news(.*)",
   "/api/shop(.*)",
   // Handler returns 401 when unauthenticated; avoid middleware HTML 404 on API clients.
   "/api/favorites(.*)",

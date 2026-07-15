@@ -1,4 +1,4 @@
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, ne } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 import type {
@@ -11,10 +11,7 @@ import { fortniteEvents, ingestionRuns } from "@/db/schema";
 import { env } from "@/env";
 import { getDb } from "@/lib/db";
 import { mapEventRowToDto } from "@/lib/events/map-row-to-dto";
-import {
-  buildNewsMotdImageMapFromJson,
-  shopEntryImageUrl,
-} from "@/lib/fortnite/fortnite-images";
+import { shopEntryImageUrl } from "@/lib/fortnite/fortnite-images";
 import { dedupeShopEventsForDashboard } from "@/lib/fortnite/shop-rotation";
 
 export const dynamic = "force-dynamic";
@@ -24,18 +21,11 @@ function isIngestionStatus(value: string): value is IngestionStatus {
 }
 
 const FORTNITE_API_BASE = "https://fortnite-api.com";
-const NEWS_IMAGE_CACHE_MS = 4 * 60 * 1000;
 
 function hasBackgroundImage(meta: Record<string, unknown>): boolean {
   const u = meta.backgroundImageUrl;
   return typeof u === "string" && u.length > 0;
 }
-
-let newsImageCache: {
-  expiresAt: number;
-  byNewsId: Map<string, string>;
-  brFallback: string | null;
-} | null = null;
 
 function apiHeaders(apiKey: string | undefined): HeadersInit {
   const headers: Record<string, string> = { Accept: "application/json" };
@@ -43,50 +33,11 @@ function apiHeaders(apiKey: string | undefined): HeadersInit {
   return headers;
 }
 
-async function getNewsImageLookup(apiKey: string | undefined) {
-  const now = Date.now();
-  if (newsImageCache && newsImageCache.expiresAt > now) {
-    return newsImageCache;
-  }
-  const res = await fetch(`${FORTNITE_API_BASE}/v2/news`, {
-    headers: apiHeaders(apiKey),
-    cache: "no-store",
-  });
-  if (!res.ok) return null;
-  const json = (await res.json()) as unknown;
-  const { byNewsId, brFallback } = buildNewsMotdImageMapFromJson(json);
-  newsImageCache = {
-    expiresAt: now + NEWS_IMAGE_CACHE_MS,
-    byNewsId,
-    brFallback,
-  };
-  return newsImageCache;
-}
-
 async function hydrateEventBackgrounds(
   events: FortniteEventDTO[],
   apiKey: string | undefined,
 ): Promise<FortniteEventDTO[]> {
   let next = events;
-
-  const needsNews = next.some(
-    (e) => e.source === "news" && !hasBackgroundImage(e.metadata),
-  );
-  if (needsNews) {
-    const lookup = await getNewsImageLookup(apiKey);
-    if (lookup) {
-      next = next.map((e) => {
-        if (e.source !== "news" || hasBackgroundImage(e.metadata)) return e;
-        const id = e.metadata.newsId;
-        const url =
-          typeof id === "string"
-            ? (lookup.byNewsId.get(id) ?? lookup.brFallback)
-            : lookup.brFallback;
-        if (!url) return e;
-        return { ...e, metadata: { ...e.metadata, backgroundImageUrl: url } };
-      });
-    }
-  }
 
   const needsShop = next.some(
     (e) => e.source === "shop" && !hasBackgroundImage(e.metadata),
@@ -130,7 +81,12 @@ export async function GET() {
     const rows = await db
       .select()
       .from(fortniteEvents)
-      .where(and(eq(fortniteEvents.visible, true)))
+      .where(
+        and(
+          eq(fortniteEvents.visible, true),
+          ne(fortniteEvents.source, "news"),
+        ),
+      )
       .orderBy(asc(fortniteEvents.sortPriority), asc(fortniteEvents.targetAt));
 
     const last = await db

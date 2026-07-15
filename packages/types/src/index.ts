@@ -78,6 +78,27 @@ export interface EventsApiResponse {
   } | null;
 }
 
+/** Informational BR MOTD — no countdown product meaning. */
+export interface NewsItemDTO {
+  id: string;
+  externalKey: string;
+  title: string;
+  tabTitle: string | null;
+  body: string;
+  imageUrl: string | null;
+  sortingPriority: number | null;
+  publishedAt: string | null;
+}
+
+export interface NewsApiResponse {
+  items: NewsItemDTO[];
+  lastIngest: {
+    finishedAt: string | null;
+    status: IngestionStatus;
+    eventsUpserted: number;
+  } | null;
+}
+
 /** Row archived from `fortnite_event` (target more than 24h ago). */
 export interface HistoryEventDTO {
   id: string;
