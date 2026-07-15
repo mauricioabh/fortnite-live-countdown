@@ -26,6 +26,6 @@
 ## 5. Verification
 
 - [x] 5.1 Add or extend Playwright coverage at viewport 390 for shell/primary routes (no document-level horizontal overflow)
-- [ ] 5.2 On HTTPS preview/production: verify Android installability and iOS Add to Home Screen
-- [ ] 5.3 Verify airplane-mode / offline navigation shows the offline fallback (not a cached private dashboard)
+- [x] 5.2 On HTTPS preview/production: verify Android installability and iOS Add to Home Screen
+- [x] 5.3 Verify airplane-mode / offline navigation shows the offline fallback (not a cached private dashboard)
 - [x] 5.4 Update docs briefly (`docs/SCREENS.md` and/or `docs/TECH_STACK.md`) noting web PWA install support
