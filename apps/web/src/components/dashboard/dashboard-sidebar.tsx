@@ -12,6 +12,11 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Events", description: "Main countdown" },
   {
+    href: "/news",
+    label: "News",
+    description: "BR MOTDs (no countdown)",
+  },
+  {
     href: "/favoritos",
     label: "Favorites",
     description: "Saved to your account",

@@ -28,7 +28,8 @@ Los jugadores y seguidores del juego necesitan una vista **única y jerárquica*
 
 - Cron **una vez al día** que llama a fortnite-api (`/v2/seasons`, `/v2/news`, `/v2/shop/br` según diseño de ingestión), valida respuestas, **upsert** de eventos en Neon.
 - API interna en Next.js que **lee Neon** y sirve al cliente web y a la app móvil.
-- Dashboard con **hero banners de ancho completo** (cantidad = eventos en DB), barra de metadatos por banner (versión, estado de archivos si aplica, tiempo desde última ingesta/servidor).
+- Dashboard **Events** (`/`): hero banners con cuenta atrás solo para hitos con **fecha real** (p. ej. rotación de tienda). Los MOTD de `/v2/news` **no** son countdowns.
+- Sección **News** (`/news`): MOTDs BR informativos (sin timer); ingest sigue persiendo `source=news` para `GET /api/news`.
 - Sección **Tienda BR**: grid responsiva (varias columnas según viewport) con **todas** las ofertas del BR shop y lista de ítems/pistas por oferta cuando aplique; datos del modelo derivado de `/v2/shop` (fortnite-api.com).
 - Hook **`useCountdown`**: tick 1s, cleanup de `setInterval`, sin fugas.
 - **Clerk**: `/sign-in`, `/sign-up` con email/contraseña y Google (web + Expo).

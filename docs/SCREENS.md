@@ -6,14 +6,17 @@ Monorepo **Turborepo**: `apps/web` (Next.js App Router), `apps/mobile` (Expo Rou
 
 | Ruta                        | Pantalla         | Descripción breve                                                                                              | Acceso                                                         |
 | --------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `/`                         | Dashboard        | **Eventos:** lista de **N** hero banners (cuenta atrás), sidebar de navegación                                 | Autenticado (recomendado) o mixto si se define landing pública |
+| `/`                         | Events           | Hero banners con **cuenta atrás** solo para hitos con fecha real (p. ej. rotación shop). **Sin** MOTDs/`news`  | Autenticado (recomendado) o mixto si se define landing pública |
+| `/news`                     | News             | MOTDs BR informativos (título, body, imagen, tabTitle); **sin countdown**                                      | Autenticado                                                    |
+| `/favoritos`                | Favorites        | Favoritos; si un favorite `event` apunta a news, card informativa (sin timer)                                  | Autenticado                                                    |
 | `/jam-tracks`               | Jam tracks       | Ofertas de pistas (Festival), filtradas por `offerSection === jam`                                             | Autenticado                                                    |
 | `/tienda`                   | Tienda BR        | Resto del shop BR (skins, gestos, lotes…), `offerSection === other`                                            | Autenticado                                                    |
 | `/historial`                | Historial        | Tabla de eventos archivados (`fortnite_event_history`)                                                         | Autenticado                                                    |
 | `/sign-in`                  | Inicio de sesión | Clerk `<SignIn />` — email/contraseña + Google                                                                 | Público                                                        |
 | `/sign-up`                  | Registro         | Clerk `<SignUp />` — email/contraseña + Google                                                                 | Público                                                        |
 | `/api/cron/ingest-fortnite` | —                | Ejecutado por **Vercel Cron** (o similar); valida `CRON_SECRET`, llama fortnite-api, escribe Neon              | Solo cron / servidor                                           |
-| `/api/events`               | —                | Lista eventos countdown desde DB (JSON para React Query)                                                       | Autenticado o público según política final                     |
+| `/api/events`               | —                | Lista eventos countdown desde DB; **excluye** `source=news`                                                    | Autenticado o público según política final                     |
+| `/api/news`                 | —                | Lista MOTDs informativos (`NewsApiResponse`)                                                                   | Misma política que `/api/events`                               |
 | `/api/shop/daily-ops`       | —                | Payload normalizado para la cuadrícula Tienda BR (`ShopOffersResponse`; metadata `dailyOps` en el evento shop) | Misma política que arriba                                      |
 | `/api/history`              | —                | Lista archivados (requiere sesión Clerk)                                                                       | Autenticado                                                    |
 
@@ -21,6 +24,7 @@ Monorepo **Turborepo**: `apps/web` (Next.js App Router), `apps/mobile` (Expo Rou
 
 - `AppHeader` — logo + título _Live countdown for Fortnite_.
 - `EventHeroBanner` — props: títulos, `targetEndUtc`, metadata, clase de “heat”, `isTopPriority` (pulse).
+- `NewsCard` — MOTD informativo (sin `useCountdown`).
 - `ShopOffersGrid` — cards estilo tienda (imagen si hay URL), categorías por `brItems.type`, cuenta atrás.
 - `HistorialPage` — tabla de filas archivadas tras ingesta.
 - Layout raíz con ClerkProvider + fuentes (sans + mono para dígitos).

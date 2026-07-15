@@ -7,6 +7,7 @@ import { env } from "@/env";
 import {
   archiveStaleFortniteEvents,
   archiveSupersededShopRotations,
+  hideAbsentNewsEvents,
 } from "@/lib/db/archive-stale-events";
 import { getDb } from "@/lib/db";
 import { buildIngestRows } from "@/lib/fortnite/ingest";
@@ -50,9 +51,14 @@ export async function GET(request: Request) {
     );
   }
 
-  const { rows, errors } = await buildIngestRows(env.FORTNITE_API_KEY);
+  const { rows, errors, newsSync } = await buildIngestRows(
+    env.FORTNITE_API_KEY,
+  );
 
   if (rows.length === 0) {
+    const hiddenAbsentNews = newsSync.ok
+      ? await hideAbsentNewsEvents(db, newsSync.activeExternalKeys)
+      : 0;
     if (errors.length > 0) {
       Sentry.captureMessage("Fortnite ingest produced no rows", {
         level: "error",
@@ -74,6 +80,7 @@ export async function GET(request: Request) {
       {
         ok: false,
         eventsUpserted: 0,
+        hiddenAbsentNews,
         errors,
       },
       { status: errors.length > 0 ? 502 : 200 },
@@ -104,6 +111,9 @@ export async function GET(request: Request) {
 
     const archivedSupersededShop = await archiveSupersededShopRotations(db);
     const archived = await archiveStaleFortniteEvents(db);
+    const hiddenAbsentNews = newsSync.ok
+      ? await hideAbsentNewsEvents(db, newsSync.activeExternalKeys)
+      : 0;
 
     const status = errors.length > 0 ? "partial" : "success";
     await db
@@ -121,6 +131,7 @@ export async function GET(request: Request) {
       eventsUpserted: rows.length,
       archived,
       archivedSupersededShop,
+      hiddenAbsentNews,
       warnings: errors,
     });
   } catch (e) {

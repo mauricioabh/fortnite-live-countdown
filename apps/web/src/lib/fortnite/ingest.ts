@@ -1,4 +1,4 @@
-import { addMinutes, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 
 import type { FortniteEventKind } from "@fortnite-live-countdown/types";
 
@@ -278,6 +278,8 @@ function shopOfferCardFromEntry(
 export interface IngestBuildResult {
   rows: FortniteEventInsert[];
   errors: string[];
+  /** Set when `/v2/news` parsed successfully (even if zero MOTDs). */
+  newsSync: { ok: true; activeExternalKeys: string[] } | { ok: false };
 }
 
 export async function buildIngestRows(
@@ -358,32 +360,42 @@ export async function buildIngestRows(
     });
   }
 
+  let newsSync: IngestBuildResult["newsSync"] = { ok: false };
+
   if (newsParsed?.success) {
     const br = newsParsed.data.data.br;
     const brRecord = br as unknown as Record<string, unknown>;
     const brBannerFallback = brNewsBannerUrl(brRecord);
-    const baseDate = parseISO(br.date);
+    const publishedAt = br.date;
+    const feedAsOf = parseISO(br.date);
     const motds = [...(br.motds ?? [])]
       .filter((m) => !m.hidden)
       .sort((a, b) => (b.sortingPriority ?? 0) - (a.sortingPriority ?? 0))
       .slice(0, 6);
 
+    const activeExternalKeys: string[] = [];
+
     motds.forEach((m, index) => {
-      const priority = m.sortingPriority ?? 100 - index;
-      const targetAt = addMinutes(baseDate, Math.max(30, 720 - priority));
+      const externalKey = `news:${m.id}`;
+      activeExternalKeys.push(externalKey);
       const motdRecord = m as Record<string, unknown>;
       const newsBg = motdImageUrl(motdRecord) ?? brBannerFallback;
+      const body = m.body ?? "";
       rows.push({
-        externalKey: `news:${m.id}`,
+        externalKey,
         kind: "other" satisfies FortniteEventKind,
         title: m.title,
         subtitle: m.tabTitle ?? null,
-        targetAt,
+        // Feed as-of only — never a fabricated MOTD end for countdown UX.
+        targetAt: feedAsOf,
         startsAt: null,
         metadata: {
           newsId: m.id,
-          bodyPreview: (m.body ?? "").slice(0, 280),
+          tabTitle: m.tabTitle ?? null,
+          body,
+          bodyPreview: body.slice(0, 280),
           sortingPriority: m.sortingPriority ?? null,
+          publishedAt,
           ...(newsBg ? { backgroundImageUrl: newsBg } : {}),
         },
         source: "news",
@@ -391,7 +403,9 @@ export async function buildIngestRows(
         visible: true,
       });
     });
+
+    newsSync = { ok: true, activeExternalKeys };
   }
 
-  return { rows, errors };
+  return { rows, errors, newsSync };
 }

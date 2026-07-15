@@ -35,8 +35,7 @@ export const HistorialPage = () => {
   return (
     <>
       <AppHeader
-        isEventsLoading={false}
-        lastIngestLabel={null}
+        statusLabel={null}
         sectionHint="Archived events (target more than 24h ago)"
       />
 
