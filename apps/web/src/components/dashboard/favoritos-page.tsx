@@ -7,6 +7,7 @@ import type {
   FortniteEventDTO,
   HistoryApiResponse,
   HistoryEventDTO,
+  NewsApiResponse,
   ShopOffersResponse,
 } from "@fortnite-live-countdown/types";
 import { heatTierForIndex, msUntilUtc } from "@fortnite-live-countdown/utils";
@@ -15,6 +16,7 @@ import { useMemo } from "react";
 import { AppHeader } from "@/components/dashboard/app-header";
 import { EventHeroBanner } from "@/components/dashboard/event-hero-banner";
 import { FavoriteStarButton } from "@/components/dashboard/favorite-star-button";
+import { NewsCard } from "@/components/dashboard/news-card";
 import {
   JamTrackCard,
   ShopCard,
@@ -43,6 +45,12 @@ async function fetchHistory(): Promise<HistoryApiResponse> {
   const res = await fetch("/api/history", { credentials: "include" });
   if (!res.ok) throw new Error("Could not load history");
   return res.json() as Promise<HistoryApiResponse>;
+}
+
+async function fetchNews(): Promise<NewsApiResponse> {
+  const res = await fetch("/api/news", { credentials: "include" });
+  if (!res.ok) throw new Error("Could not load news");
+  return res.json() as Promise<NewsApiResponse>;
 }
 
 function formatCell(iso: string): string {
@@ -84,6 +92,7 @@ export const FavoritosPage = () => {
     queryKey: ["event-history"],
     queryFn: fetchHistory,
   });
+  const newsQ = useQuery({ queryKey: ["news"], queryFn: fetchNews });
 
   const eventIdSet = useMemo(() => {
     const ids = new Set<string>();
@@ -117,6 +126,11 @@ export const FavoritosPage = () => {
       .sort((a, b) => msUntilUtc(a.targetAt) - msUntilUtc(b.targetAt));
   }, [eventsQ.data?.events, eventIdSet]);
 
+  const favoritedNews = useMemo(() => {
+    const items = newsQ.data?.items ?? [];
+    return items.filter((n) => eventIdSet.has(n.id));
+  }, [newsQ.data?.items, eventIdSet]);
+
   const favoritedJam = useMemo(() => {
     const cards = shopQ.data?.cards ?? [];
     return cards
@@ -145,12 +159,18 @@ export const FavoritosPage = () => {
     favQ.isLoading ||
     eventsQ.isLoading ||
     shopQ.isLoading ||
-    historyQ.isLoading;
+    historyQ.isLoading ||
+    newsQ.isLoading;
   const isError =
-    favQ.isError || eventsQ.isError || shopQ.isError || historyQ.isError;
+    favQ.isError ||
+    eventsQ.isError ||
+    shopQ.isError ||
+    historyQ.isError ||
+    newsQ.isError;
 
   const totalCount =
     favoritedEvents.length +
+    favoritedNews.length +
     favoritedJam.length +
     favoritedShopOther.length +
     favoritedHistory.length;
@@ -158,8 +178,8 @@ export const FavoritosPage = () => {
   return (
     <>
       <AppHeader
-        isEventsLoading={isLoading}
-        lastIngestLabel={null}
+        isStatusLoading={isLoading}
+        statusLabel={isLoading ? "Loading favorites…" : null}
         sectionHint="Your saved events, offers, and history items"
       />
 
@@ -169,11 +189,13 @@ export const FavoritosPage = () => {
             ? favQ.error.message
             : eventsQ.error instanceof Error
               ? eventsQ.error.message
-              : shopQ.error instanceof Error
-                ? shopQ.error.message
-                : historyQ.error instanceof Error
-                  ? historyQ.error.message
-                  : "Failed to load favorites"}
+              : newsQ.error instanceof Error
+                ? newsQ.error.message
+                : shopQ.error instanceof Error
+                  ? shopQ.error.message
+                  : historyQ.error instanceof Error
+                    ? historyQ.error.message
+                    : "Failed to load favorites"}
         </div>
       ) : null}
 
@@ -209,6 +231,27 @@ export const FavoritosPage = () => {
                 event={event}
                 heat={heatTierForIndex(index, favoritedEvents.length)}
                 isTopPriority={index === 0}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {!isLoading && !isError && favoritedNews.length > 0 ? (
+        <section className="mt-8">
+          <h2 className="mb-4 text-lg font-semibold text-foreground">News</h2>
+          <div className="grid grid-cols-1 gap-md sm:grid-cols-2">
+            {favoritedNews.map((item) => (
+              <NewsCard
+                key={item.id}
+                item={item}
+                action={
+                  <FavoriteStarButton
+                    targetType="event"
+                    targetKey={item.id}
+                    className="z-10"
+                  />
+                }
               />
             ))}
           </div>

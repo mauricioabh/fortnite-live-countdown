@@ -1,0 +1,21 @@
+team:
+  id: "918d1d41-95ee-429a-976f-e380f65feb8b"
+  key: "WAY"
+  name: "Wayool"
+project:
+  id: "bf6ca87a-4758-4aae-86b2-83b9ef58a311"
+  name: "fortnite-live-countdown"
+issue_label_filter:
+  name: "FLC"
+archive_documents:
+  enabled: true
+  title_prefix: "OpenSpec:"
+  documents:
+    news-section:
+      id: "4422fca3-436e-45f5-a0c7-5594177d4c8d"
+      url: "https://linear.app/wayool/document/openspec-news-section-02383fd1771b"
+      title: "OpenSpec: news-section"
+    countdown-events:
+      id: "1feb3cdf-af63-4b5c-ada3-dd1397891e03"
+      url: "https://linear.app/wayool/document/openspec-countdown-events-3ad812f8c9b5"
+      title: "OpenSpec: countdown-events"

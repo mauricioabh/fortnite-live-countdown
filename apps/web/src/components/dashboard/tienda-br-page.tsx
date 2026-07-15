@@ -6,11 +6,7 @@ import { ShopOffersGrid } from "@/components/dashboard/shop-offers-grid";
 export const TiendaBrPage = () => {
   return (
     <>
-      <AppHeader
-        isEventsLoading={false}
-        lastIngestLabel={null}
-        sectionHint={null}
-      />
+      <AppHeader statusLabel={null} sectionHint={null} />
       <ShopOffersGrid
         filter="other"
         heading={null}
