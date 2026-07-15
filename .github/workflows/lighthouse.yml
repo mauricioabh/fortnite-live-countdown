@@ -32,15 +32,25 @@ jobs:
 
       - name: Start production server
         working-directory: apps/web
-        run: npm run start &
+        run: |
+          # Bind explicitly; keep logs if readiness fails.
+          nohup npm run start -- -H 0.0.0.0 -p 3000 > /tmp/next-start.log 2>&1 &
+          echo $! > /tmp/next.pid
 
       - name: Wait for Next.js
         run: |
-          for i in $(seq 1 30); do
-            curl -sf http://localhost:3000 > /dev/null && echo "Ready after ${i}s" && exit 0
+          # Probe a public route (not `/`, which hits Clerk protect).
+          for i in $(seq 1 120); do
+            if curl -sf "http://127.0.0.1:3000/robots.txt" > /dev/null; then
+              echo "Ready after ${i}s"
+              exit 0
+            fi
             sleep 1
           done
-          echo "::error::Next.js did not become ready in 30s" && exit 1
+          echo "::error::Next.js did not become ready in 120s"
+          echo "=== next start log ==="
+          cat /tmp/next-start.log || true
+          exit 1
 
       - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@v12
